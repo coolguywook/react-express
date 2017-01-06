@@ -2,10 +2,9 @@
 
 Chapter 1.
 
-Back-end : 
-  
+Back-end :
+
   - Authentication
   - SignIn
   - SignOut
   - SignUp
-  - Board
