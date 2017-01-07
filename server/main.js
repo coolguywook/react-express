@@ -10,6 +10,7 @@ import bodyParser from 'body-parser'; // PARSE HTML BODY
 import mongoose from 'mongoose';
 import session from 'express-session';
 
+import api from './routes'
 
 const app = express();
 const port = 3000;
@@ -33,11 +34,12 @@ app.use(session({
 
 app.use('/', express.static(path.join(__dirname, './../public')));
 
+app.use('/api', api);
 
 /* handle error */
 app.use(function(err, req, res, next) {
   console.error(err.stack);
-  res.status(500).send('Something broke!');
+  res.status(500).send('Internal Server error.');
 });
 
 app.listen(port, () => {

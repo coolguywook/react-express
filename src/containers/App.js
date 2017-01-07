@@ -1,10 +1,10 @@
 import React from 'react';
+import { Header } from 'components';
 
 class App extends React.Component {
     render(){
-
         return (
-                <h1>React Skeleton.</h1>
+            <Header />
         );
     }
 }

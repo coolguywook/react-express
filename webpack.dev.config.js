@@ -49,20 +49,25 @@ module.exports = {
                 exclude: /node_modules/
             }, {
                 test: /\.css$/,
-                loader: 'style!css-loader'
-            }, {
-                test: /\.(jpe?g|png|gif|svg|eot|woff2|woff|ttf)$/i,
-                loaders: ['file?hash=sha512&digest=hex&name=[hash].[ext]']
-            }
+                 loader: 'style!css-loader'
+             }, {
+                 test: /\.(jpe?g|png|gif|svg)$/i,
+                 loaders: ['file?hash=sha512&digest=hex&name=media/[name]-[hash:8].[ext]']
+             //}, { test: /.(woff|woff2|eot|ttf)$/,
+            //      loader:"url?prefix=font/&limit=5000"
+             }, {
+                 test: /\.(woff|woff2|ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                 loader: "url-loader?limit=10000&name=media/[name]-[hash:8].[ext]"
+             }
         ]
     },
-
     resolve: {
         root: path.resolve('./src')
     },
     plugins: [
             new webpack.optimize.OccurenceOrderPlugin(),
             new webpack.HotModuleReplacementPlugin(),
-            new webpack.NoErrorsPlugin()
+            new webpack.NoErrorsPlugin(),
+            new webpack.ProvidePlugin({$: "jquery", jQuery: "jquery", 'window.jQuery': 'jquery'})
         ],
 };
