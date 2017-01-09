@@ -66,6 +66,10 @@ app.use('/', _express2.default.static(_path2.default.join(__dirname, './../publi
 
 app.use('/api', _routes2.default);
 
+app.get('*', function (req, res) {
+    res.sendFile(_path2.default.resolve(__dirname, './../public/index.html'));
+});
+
 /* handle error */
 app.use(function (err, req, res, next) {
     console.error(err.stack);

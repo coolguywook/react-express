@@ -1,0 +1,5 @@
+/* SignIn */
+
+export const REQ_SIGNIN = "REQ_SIGNIN";
+export const REQ_SIGNIN_SUCCESS = "REQ_SIGNIN_SUCCESS";
+export const REQ_SIGNIN_FAILURE = "REQ_SIGNIN_FAILURE";

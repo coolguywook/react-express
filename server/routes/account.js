@@ -80,7 +80,7 @@ router.post('/signin', (req, res) => {
             roles: account.roles
         };
 
-        res.json({ success: true});
+        res.json({ success: true });
     })
 });
 
