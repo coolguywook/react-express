@@ -23,7 +23,7 @@ router.post('/signup', (req, res) => {
         });
     }
 
-    Account.fondOne({ username: req.body.username }, (err, exists) => {
+    Account.findOne({ username: req.body.username }, (err, exists) => {
             if(err) throw err;
             if(exists) {
                 return res.status(409).json({

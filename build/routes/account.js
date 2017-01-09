@@ -36,7 +36,7 @@ router.post('/signup', function (req, res) {
         });
     }
 
-    _account2.default.fondOne({ username: req.body.username }, function (err, exists) {
+    _account2.default.findOne({ username: req.body.username }, function (err, exists) {
         if (err) throw err;
         if (exists) {
             return res.status(409).json({

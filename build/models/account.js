@@ -19,6 +19,9 @@ var Schema = _mongoose2.default.Schema;
 var Account = new Schema({
     username: String,
     password: String,
+    firstname: String,
+    lastname: String,
+    phone: String,
     roles: [{ type: String, uppercase: true, default: 'ROLE_USER' }],
     created: { type: Date, default: Date.now }
 });

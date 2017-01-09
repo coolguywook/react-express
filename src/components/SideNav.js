@@ -4,10 +4,7 @@ import {Link} from 'react-router';
 import 'materialize-css/dist/js/materialize.min.js';
 import 'materialize-css/dist/css/materialize.min.css';
 import 'material-design-icons/iconfont/material-icons.css';
-
-const logoStyle = {
-    marginLeft: '10px'
-}
+import 'materialize-css/js/init.js';
 
 class SideNav extends React.Component {
 

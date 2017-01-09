@@ -6,9 +6,11 @@ import 'materialize-css/dist/css/materialize.min.css';
 import 'material-design-icons/iconfont/material-icons.css';
 import 'materialize-css/js/init.js';
 
-const logoStyle = {
-    marginLeft: '10px'
-}
+const styles = {
+  logo: {
+    marginLeft: '10px',
+  },
+};
 
 class Header extends React.Component {
 
@@ -18,32 +20,35 @@ class Header extends React.Component {
 
     render() {
 
-        const loginButton = (
+        const signinButton = (
           <li>
               <Link to="/signin">
                   <i className="material-icons right">lock_open</i>Sign In</Link>
           </li>
         );
 
-        const logoutButton = (
+        const signoutButton = (
           <li>
               <a onClick={this.props.onLogout}>
                   <i className="material-icons right">lock</i>Sign Out</a>
           </li>
+        );
 
+        const signupButton = (
+            <li>
+                <Link to="/signup">
+                    <i className="material-icons left">vpn_key</i>Sign Up</Link>
+            </li>
         );
 
         return (
             <nav>
                 <div className="nav-wrapper">
                     <a href="#" data-activates="slide-out" className="button-collapse"><i className="material-icons">menu</i></a>
-                    <Link to="/" className="brand-logo" style={logoStyle}>Logo</Link>
+                    <Link to="/" className="brand-logo" style={styles.logo}>Logo</Link>
                     <ul className="right hide-on-med-and-down">
-                        <li>
-                            <a href="sass.html">
-                                <i className="material-icons left">vpn_key</i>Sign Up</a>
-                        </li>
-                        { this.props.isLoggedIn ? logoutButton : loginButton }
+                      { signupButton }
+                      { this.props.isLoggedIn ? signoutButton : signinButton }
                     </ul>
                 </div>
             </nav>

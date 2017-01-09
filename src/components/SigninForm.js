@@ -35,31 +35,34 @@ class SigninForm extends React.Component {
             <div className="container auth">
                 <div className="card">
                     <div className="header grey darken-2 white-text center">
-                        <div className="card-content">SIGNIN</div>
+                        <div className="card-content">SIGN IN</div>
                     </div>
                     <div className="card-content">
                         <div className="row">
                             <div className="input-field col s12">
                                 <i className="material-icons prefix">perm_identity</i>
-                                <input id="username" name="username" type="email" className="validate"/>
+                                <input id="username" name="username" type="email" className="validate" value={this.state.username} onChange={this.handleChange}/>
                                 <label htmlFor="username" data-error="Incorrect email" data-success="">Email</label>
                             </div>
                         </div>
                         <div className="row">
                             <div className="input-field col s12">
                                 <i className="material-icons prefix">lock_outline</i>
-                                <input id="password" name="password" type="password" className="validate"/>
+                                <input id="password" name="password" type="password" className="validate" value={this.state.password} onChange={this.handleChange}/>
                               <label htmlFor="password">Password</label>
                             </div>
                         </div>
-                        <a className="waves-effect light-blue darken-2 btn" onClick={this.handleSignin}>SUBMIT</a>
+                        {/*<a className="waves-effect light-blue darken-2 btn" onClick={this.handleSignin}>SUBMIT</a>*/}
+                        <button className="btn waves-effect light-blue darken-2" type="submit" name="action" onClick={this.handleSignin}>Submit
+                            <i className="material-icons right">send</i>
+                         </button>
                     </div>
 
                     <div className="footer">
                         <div className="card-content">
                             <div className="right">
                                 Not registered?
-                                <Link to="/signup">Create an account</Link>
+                                <Link to="/signup"> Create an account</Link>
                             </div>
                         </div>
                     </div>

@@ -1,4 +1,4 @@
-import {REQ_SIGNIN, REQ_SIGNIN_SUCCESS, REQ_SIGNIN_FAILURE} from './ActionTypes';
+import {REQ_SIGNIN, RES_SIGNIN_SUCCESS, RES_SIGNIN_FAILURE} from './ActionTypes';
 import axios from 'axios';
 
 export function signin() {
@@ -6,11 +6,11 @@ export function signin() {
 }
 
 export function signinSuccess(username) {
-    return {type: REQ_SIGNIN_SUCCESS, username}
+    return {type: RES_SIGNIN_SUCCESS, username}
 }
 
 export function signinFailure() {
-    return {type: REQ_SIGNIN_FAILURE};
+    return {type: RES_SIGNIN_FAILURE};
 }
 
 export function requestSignin(username, password) {
