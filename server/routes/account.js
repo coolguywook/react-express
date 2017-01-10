@@ -94,7 +94,7 @@ router.get('/getinfo', (req, res) => {
         });
     }
 
-    res.json({ info: req.session.loginInfo });
+    res.json({ loginInfo: req.session.loginInfo });
 });
 
 router.post('/signout', (req, res) => {

@@ -23,14 +23,14 @@ class Header extends React.Component {
         const signinButton = (
           <li>
               <Link to="/signin">
-                  <i className="material-icons right">lock_open</i>Sign In</Link>
+                  <i className="material-icons left">lock_open</i>Sign In</Link>
           </li>
         );
 
         const signoutButton = (
           <li>
               <a onClick={this.props.onLogout}>
-                  <i className="material-icons right">lock</i>Sign Out</a>
+                  <i className="material-icons left">lock</i>Sign Out</a>
           </li>
         );
 
@@ -45,7 +45,7 @@ class Header extends React.Component {
             <nav>
                 <div className="nav-wrapper">
                     <a href="#" data-activates="slide-out" className="button-collapse"><i className="material-icons">menu</i></a>
-                    <Link to="/" className="brand-logo" style={styles.logo}>Logo</Link>
+                    <Link to="/" className="brand-logo" style={styles.logo}>COOLGUYWOOK</Link>
                     <ul className="right hide-on-med-and-down">
                       { signupButton }
                       { this.props.isLoggedIn ? signoutButton : signinButton }
