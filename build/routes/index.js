@@ -12,9 +12,14 @@ var _account = require('./account');
 
 var _account2 = _interopRequireDefault(_account);
 
+var _comment = require('./comment');
+
+var _comment2 = _interopRequireDefault(_comment);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var router = _express2.default.Router();
 router.use('/account', _account2.default);
+router.use('/comment', _comment2.default);
 
 exports.default = router;

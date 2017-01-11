@@ -93,7 +93,7 @@ router.post('/signin', function (req, res) {
             roles: account.roles
         };
 
-        res.json({ success: true });
+        res.json({ success: true, roles: account.roles });
     });
 });
 

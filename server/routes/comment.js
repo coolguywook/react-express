@@ -20,7 +20,7 @@ router.post('/', (req, res) => {
         });
     }
 
-    if(typeof req.body.contents === "") {
+    if(req.body.contents === "") {
         return res.status(400).json({
             error: "EMPTY CONTENTS",
             code: 2
@@ -39,7 +39,7 @@ router.post('/', (req, res) => {
 });
 
 // Modify
-router.post('/:id', (req, res) => {
+router.put('/:id', (req, res) => {
     if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
         return res.status(400).json({
             error: "INVALID ID",
@@ -54,7 +54,7 @@ router.post('/:id', (req, res) => {
         });
     }
 
-    if(typeof req.body.contents === "") {
+    if(req.body.contents === "") {
         return res.status(400).json({
             error: "EMPTY CONTENTS",
             code: 2
@@ -91,7 +91,7 @@ router.post('/:id', (req, res) => {
 });
 
 // Delete
-router.post('/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
     if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
         return res.status(400).json({
             error: "INVALID ID",
@@ -131,12 +131,54 @@ router.post('/:id', (req, res) => {
 });
 
 // Get
-router.post('/', (req, res) => {
-    Comment.find().sort({"_id": -1}).limit(6)
-        .exec((err, comments) => {
-            if(err) throw err;
-            res.json(comments);
+router.get('/', (req, res) => {
+    Comment.find()
+    .sort({"_id": -1})
+    .limit(6)
+    .exec((err, comments) => {
+        if(err) throw err;
+        res.json(comments);
+    });
+});
+
+router.get('/:listType/:id', (req, res) => {
+    let listType = req.params.listType;
+    let id = req.params.id;
+
+    if(listType !== 'old' && listType !== 'new') {
+        return res.status(400).json({
+            error: "INVALID LISTTYPE",
+            code: 1
         });
+    }
+
+    if(!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({
+            error: "INVALID ID",
+            code: 2
+        });
+    }
+
+    let objId = new mongoose.Types.ObjectId(req.params.id);
+
+    if(listType === 'new') {
+        Comment.find({ _id: { $gt: objId }})
+            .sort({ _id: -1 })
+            .limit(6)
+            .exec((err, comments) => {
+                if(err) throw err;
+                return res.json(comments);
+            });
+    } else {
+        Comment.find({ _id: { $lt: objId }})
+            .sort({"_id": -1})
+            .limit(6)
+            .exec((err, comments) => {
+                if(err) throw err;
+                return res.json(comments);
+            });
+    }
+
 });
 
 export default router;
