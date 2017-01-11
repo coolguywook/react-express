@@ -80,7 +80,7 @@ router.post('/signin', (req, res) => {
             roles: account.roles
         };
 
-        res.json({ success: true });
+        res.json({ success: true, roles: account.roles });
     })
 });
 
@@ -94,7 +94,7 @@ router.get('/getinfo', (req, res) => {
         });
     }
 
-    res.json({ loginInfo: req.session.loginInfo });
+    res.json({ info: req.session.loginInfo });
 });
 
 router.post('/signout', (req, res) => {

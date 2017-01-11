@@ -1,8 +1,7 @@
 import React from 'react';
 import {Header, SideNav} from 'components';
 import {connect} from 'react-redux';
-import {getStatusRequest} from 'actions/status';
-import {requestSignout} from 'actions/signout';
+import {getStatusRequest, requestSignout} from 'actions/authentication';
 
 import './App.css';
 
@@ -14,6 +13,8 @@ class App extends React.Component {
     }
 
     componentDidMount() {
+        console.log(this.props.status);
+
         function getCookie(name) {
             var value = "; " + document.cookie;
             var parts = value.split("; " + name + "=");

@@ -1,7 +1,7 @@
 import React from 'react';
 import { SigninForm } from 'components';
 import { connect } from 'react-redux';
-import { requestSignin } from 'actions/signin';
+import { requestSignin } from 'actions/authentication';
 import { browserHistory } from 'react-router';
 
 class Signin extends React.Component {
