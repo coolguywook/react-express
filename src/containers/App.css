@@ -1,3 +1,8 @@
+body {
+    background-color: #ECEFF1;
+    overflow-x: hidden;
+}
+
 nav {
   background-color: #f4511e;
 }
@@ -87,7 +92,8 @@ label {
 }
 
 .wrapper {
-    margin-top: 50px;
+    padding-top: 50px;
+
 }
 
 .comment .info {
@@ -152,4 +158,68 @@ label {
     font-size: 13px;
     font-weight: bold;
     color: #777;
+}
+
+/* ANIMATION */
+@-webkit-keyframes comment-enter {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+}
+
+@keyframes comment-enter {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+}
+
+.comment-enter {
+    -webkit-animation-duration: 2s;
+    animation-duration: 2s;
+    -webkit-animation-name: comment-enter;
+    animation-name: comment-enter;
+}
+
+/* ANIMATION */
+@-webkit-keyframes comment-leave {
+    0% {
+      opacity: 1;
+      max-height: 1080px;
+    }
+    50% {
+      opacity: 0;
+       -webkit-transform: translateX(100px);
+    }
+    100% {
+        max-height: 0px;
+    }
+}
+
+@keyframes comment-leave {
+    0% {
+      opacity: 1;
+      max-height: 1080px;
+    }
+    50% {
+      opacity: 0;
+      transform: translateX(100px);
+    }
+    100% {
+        max-height: 0px;
+    }
+}
+
+.comment-leave {
+    max-height: 0px;
+    opacity: 0;
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-name: comment-leave;
+    animation-name: comment-leave;
 }

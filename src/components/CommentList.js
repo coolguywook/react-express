@@ -1,5 +1,6 @@
 import React from 'react';
 import {Comment} from 'components';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 class CommentList extends React.Component {
     render() {
@@ -8,14 +9,24 @@ class CommentList extends React.Component {
                 return (
                         <Comment data={comment}
                             ownership={ (comment.writer == this.props.currentUser) }
-                            key={comment._id} />
+                            key={comment._id}
+                            index={i}
+                            onEdit={this.props.onEdit}
+                            onRemove={this.props.onRemove}
+                        />
                 );
             });
         };
 
         return(
             <div>
-                {mapToComponents(this.props.data)} 
+              <ReactCSSTransitionGroup
+                transitionName="comment"
+                transitionEnterTimeout={2000}
+                transitionLeaveTimeout={1000}>
+                  {mapToComponents(this.props.data)}
+              </ReactCSSTransitionGroup>
+
             </div>
         );
     }
@@ -23,12 +34,20 @@ class CommentList extends React.Component {
 
 CommentList.PropTypes = {
     data: React.PropTypes.array,
-    currentUser: React.PropTypes.string
+    currentUser: React.PropTypes.string,
+    onEdit: React.PropTypes.func,
+    onRemove: React.PropTypes.func
 }
 
 CommentList.defaultProps = {
     data: [],
-    currentUser: ''
+    currentUser: '',
+    onEdit: (id, index, contents) => {
+      console.error('Edit function not defined');
+    },
+    onRemove: (id, index) => {
+        console.error('Remove function not defined');
+    }
 }
 
 export default CommentList;

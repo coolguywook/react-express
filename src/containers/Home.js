@@ -1,13 +1,20 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Write, CommentList} from 'components';
-import { requestAddComment, requestCommentList } from 'actions/comment';
+import {
+  requestAddComment,
+  requestCommentList,
+  requestUpdateComment,
+  requestRemoveComment
+} from 'actions/comment';
 
 class Home extends React.Component {
 
     constructor(props) {
         super(props);
         this.handlePost = this.handlePost.bind(this);
+        this.handleEdit = this.handleEdit.bind(this);
+        this.handleRemove = this.handleRemove.bind(this);
         this.loadNewComment = this.loadNewComment.bind(this);
         this.loadOldComment = this.loadOldComment.bind(this);
 
@@ -26,9 +33,22 @@ class Home extends React.Component {
             );
         };
 
+        const loadUntilScrollable = () => {
+          if($('#body').height() < $(window).height()) {
+            this.loadOldComment().then(
+              () => {
+                if(!this.props.isLast) {
+                  loadUntilScrollable();
+                }
+              }
+            );
+          }
+        };
+
         this.props.requestCommentList(true).then(
             () => {
-                loadCommentLoop();
+              loadUntilScrollable();
+              loadCommentLoop();
             }
         );
 
@@ -86,6 +106,59 @@ class Home extends React.Component {
         return this.props.requestCommentList(false, 'new', this.props.commentData[0]._id);
     }
 
+    handleEdit(id, index, contents) {
+      return this.props.requestUpdateComment(id, index, contents).then(
+        () => {
+          if(this.props.editStatus.status === 'SUCCESS') {
+            Materialize.toast('Success!', 2000);
+          } else {
+            let errorMessage = [
+              'Something broke',
+              'Please write soemthing',
+              'You are not logged in',
+              'That memo does not exist anymore',
+              'You do not have permission'
+            ];
+
+            let error = this.props.editStatus.error;
+            let $toastContent = '<span style="color: #FFB4BA">' + errorMessage[error - 1] + '</span>';
+             Materialize.toast($toastContent, 2000);
+
+             // IF NOT LOGGED IN, REFRESH THE PAGE AFTER 2 SECONDS
+             if(error === 3) {
+                 setTimeout(()=> {location.reload(false)}, 2000);
+             }
+          }
+        }
+      );
+    }
+
+    handleRemove(id, index) {
+       this.props.requestRemoveComment(id, index).then(() => {
+           if(this.props.removeStatus.status === "SUCCESS") {
+               setTimeout(() => {
+                   if($("body").height() < $(window).height()) {
+                       this.loadOldMemo();
+                   }
+               }, 1000);
+           } else {
+               let errorMessage = [
+                   'Something broke',
+                   'You are not logged in',
+                   'That memo does not exist',
+                   'You do not have permission'
+               ];
+
+               let $toastContent = '<span style="color: #FFB4BA">' + errorMessage[this.props.removeStatus.error - 1] + '</span>';
+               Materialize.toast($toastContent, 2000);
+
+               if(this.props.removeStatus.error === 2) {
+                   setTimeout(()=> {location.reload(false)}, 2000);
+               }
+           }
+       });
+   }
+
     handlePost(contents) {
         return this.props.requestAddComment(contents).then(() => {
             if (this.props.postStatus.status == "SUCCESS") {
@@ -121,87 +194,18 @@ class Home extends React.Component {
     render() {
         const write = (<Write onPost={this.handlePost}/>);
 
-        var mockData = [
-            {
-                "_id": "578b958ec1da760909c263f4",
-                "writer": "coolguywook",
-                "contents": "Testing",
-                "__v": 0,
-                "isEdited": false,
-                "date": {
-                    "edited": "2016-07-17T14:26:22.428Z",
-                    "created": "2016-07-17T14:26:22.428Z"
-                },
-                "starred": []
-            },
-            {
-                "_id": "578b957ec1da760909c263f3",
-                "writer": "velopert",
-                "contents": "Data",
-                "__v": 0,
-                "isEdited": false,
-                "date": {
-                    "edited": "2016-07-17T14:26:06.999Z",
-                    "created": "2016-07-17T14:26:06.999Z"
-                },
-                "starred": []
-            },
-            {
-                "_id": "578b957cc1da760909c263f2",
-                "writer": "velopert",
-                "contents": "Mock",
-                "__v": 0,
-                "isEdited": false,
-                "date": {
-                    "edited": "2016-07-17T14:26:04.195Z",
-                    "created": "2016-07-17T14:26:04.195Z"
-                },
-                "starred": []
-            },
-            {
-                "_id": "578b9579c1da760909c263f1",
-                "writer": "velopert",
-                "contents": "Some",
-                "__v": 0,
-                "isEdited": false,
-                "date": {
-                    "edited": "2016-07-17T14:26:01.062Z",
-                    "created": "2016-07-17T14:26:01.062Z"
-                },
-                "starred": []
-            },
-            {
-                "_id": "578b9576c1da760909c263f0",
-                "writer": "velopert",
-                "contents": "Create",
-                "__v": 0,
-                "isEdited": false,
-                "date": {
-                    "edited": "2016-07-17T14:25:58.619Z",
-                    "created": "2016-07-17T14:25:58.619Z"
-                },
-                "starred": []
-            },
-            {
-                "_id": "578b8c82c1da760909c263ef",
-                "writer": "velopert",
-                "contents": "blablablal",
-                "__v": 0,
-                "isEdited": false,
-                "date": {
-                    "edited": "2016-07-17T13:47:46.611Z",
-                    "created": "2016-07-17T13:47:46.611Z"
-                },
-                "starred": []
-            }
-        ];
 
         return (
             <div className="wrapper">
                 {this.props.isLoggedIn
                     ? write
                     : undefined}
-                <CommentList data={this.props.commentData} currentUser={this.props.currentUser}/>
+                <CommentList
+                  data={this.props.commentData}
+                  currentUser={this.props.currentUser}
+                  onEdit={this.handleEdit}
+                  onRemove={this.handleRemove}
+                />
             </div>
         );
     }
@@ -214,7 +218,9 @@ const mapStateToProps = (state) => {
         currentUser: state.authentication.status.currentUser,
         commentData: state.comment.list.data,
         listStatus: state.comment.list.status,
-        isLast: state.comment.list.isLast
+        isLast: state.comment.list.isLast,
+        editStatus: state.comment.edit,
+        removeStatus: state.comment.remove
     };
 };
 
@@ -225,6 +231,12 @@ const mapDispatchToProps = (dispatch) => {
         },
         requestCommentList: (isInitial, listType, id, username) => {
             return dispatch(requestCommentList(isInitial, listType, id, username));
+        },
+        requestUpdateComment: (id, index, contents) => {
+            return dispatch(requestUpdateComment(id, index, contents));
+        },
+        requestRemoveComment: (id, index) => {
+            return dispatch(requestRemoveComment(id, index));
         }
     };
 };

@@ -10,6 +10,14 @@ const initialState = {
         status: 'INIT',
         data: [],
         isLast: false
+    },
+    edit: {
+      status: 'INIT',
+      error: -1
+    },
+    remove: {
+      status: 'INIT',
+      error: -1
     }
 };
 
@@ -54,30 +62,77 @@ export default function comment(state, action) {
                         isLast: { $set: action.data.length < 6 }
                     }
                 })
-            } else {
-                if(action.listType === 'new') {
-                    return update(state, {
-                        list: {
-                            status: { $set: 'SUCCESS' },
-                            data: { $unshift: action.data }
-                        }
-                    });
-                } else {
-                    return update(state, {
-                        list: {
-                            status: { $set: 'SUCCESS' },
-                            data: { $push: action.data },
-                            isLast: { $set: action.data.length < 6 }
-                        }
-                    });
-                }
             }
 
-            return state;
+            if(action.listType === 'new') {
+                return update(state, {
+                    list: {
+                        status: { $set: 'SUCCESS' },
+                        data: { $unshift: action.data }
+                    }
+                });
+            }
+
+            return update(state, {
+                list: {
+                    status: { $set: 'SUCCESS' },
+                    data: { $push: action.data },
+                    isLast: { $set: action.data.length < 6 }
+                }
+            });
         case types.GET_COMMENTLIST_FAILURE:
             return update(state, {
                 list: {
                     status: { $set: 'FAILURE' }
+                }
+            });
+        case types.UPDATE_COMMENT:
+            return update(state, {
+                edit: {
+                    status: { $set: 'WAITING' },
+                    error: { $set: -1 },
+                    comment: { $set: undefined }
+                }
+            });
+        case types.UPDATE_COMMENT_SUCCESS:
+            return update(state, {
+                edit: {
+                    status: { $set: 'SUCCESS' },
+                },
+                list: {
+                    data: {
+                        [action.index]: { $set: action.comment }
+                    }
+                }
+            });
+        case types.UPDATE_COMMENT_FAILURE:
+            return update(state, {
+                edit: {
+                    status: { $set: 'FAILURE' },
+                    error: { $set: action.error }
+                }
+            });
+        case types.DEL_COMMENT:
+            return update(state, {
+                remove: {
+                    status: { $set: 'WAITING' },
+                    error: { $set: -1 }
+                }
+            });
+        case types.DEL_COMMENT_SUCCESS:
+            return update(state, {
+                remove:{
+                    status: { $set: 'SUCCESS' }
+                },
+                list: {
+                    data: { $splice: [[action.index, 1]] }
+                }
+            });
+        case types.DEL_COMMENT_FAILURE:
+            return update(state, {
+                remove: {
+                    status: { $set: 'FAILURE' },
+                    error: { $set: action.error }
                 }
             });
         default:

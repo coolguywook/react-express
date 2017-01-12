@@ -4,7 +4,13 @@ import {
     ADD_COMMENT_FAILURE,
     GET_COMMENTLIST,
     GET_COMMENTLIST_SUCCESS,
-    GET_COMMENTLIST_FAILURE
+    GET_COMMENTLIST_FAILURE,
+    UPDATE_COMMENT,
+    UPDATE_COMMENT_SUCCESS,
+    UPDATE_COMMENT_FAILURE,
+    DEL_COMMENT,
+    DEL_COMMENT_SUCCESS,
+    DEL_COMMENT_FAILURE
 } from './ActionTypes';
 import axios from 'axios';
 
@@ -79,4 +85,70 @@ export function commentListFailure() {
     return {
         type: GET_COMMENTLIST_FAILURE
     };
+}
+
+export function requestUpdateComment(id, index, contents) {
+  return (dispatch) => {
+    dispatch(updateComment());
+
+    return axios.put('/api/comment/' + id, { contents })
+      .then((response) => {
+        dispatch(updateCommentSuccess(index, response.data.comment));
+      }).catch((error) => {
+        dispatch(updateCommentFailure(error.response.data.code));
+      });
+  };
+}
+
+export function updateComment() {
+  return {
+    type: UPDATE_COMMENT
+  };
+}
+
+export function updateCommentSuccess(index, comment) {
+  return {
+    type: UPDATE_COMMENT_SUCCESS,
+    index,
+    comment
+  };
+}
+
+export function updateCommentFailure(error) {
+  return {
+    type: UPDATE_COMMENT_FAILURE,
+    error
+  };
+}
+
+export function requestRemoveComment(id, index) {
+  return (dispatch) => {
+    dispatch(removeComment());
+    return axios.delete('/api/comment/' + id)
+      .then((response) => {
+        dispatch(removeCommentSuccess(index));
+      }).catch((error) => {
+        dispatch(removeCommentFailure(error.response.data.code));
+      });
+  };
+}
+
+export function removeComment() {
+  return {
+    type: DEL_COMMENT
+  };
+}
+
+export function removeCommentSuccess(index) {
+  return {
+    type: DEL_COMMENT_SUCCESS,
+    index
+  };
+}
+
+export function removeCommentFailure(error) {
+  return {
+    type: DEL_COMMENT_FAILURE,
+    error
+  }
 }
