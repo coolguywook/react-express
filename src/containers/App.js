@@ -1,7 +1,9 @@
 import React from 'react';
-import {Header, SideNav} from 'components';
+import {Header, SideNav, LangPicker} from 'components';
 import {connect} from 'react-redux';
 import {getStatusRequest, requestSignout} from 'actions/authentication';
+import {changeLocale} from 'actions/locale';
+
 
 import './App.css';
 
@@ -10,11 +12,10 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.handleSignout = this.handleSignout.bind(this);
+        this.handleLocale = this.handleLocale.bind(this);
     }
 
     componentDidMount() {
-        console.log(this.props.status);
-
         function getCookie(name) {
             var value = "; " + document.cookie;
             var parts = value.split("; " + name + "=");
@@ -31,8 +32,6 @@ class App extends React.Component {
 
         this.props.getStatusRequest().then(
             () => {
-                console.log(this.props.status);
-
                 if(!this.props.status.valid) {
                     loginData = {
                         isLoggedIn: false,
@@ -63,6 +62,13 @@ class App extends React.Component {
         );
     }
 
+    handleLocale(locale) {
+        console.log('Set Locale called.' + locale);
+
+        this.props.changeLocale(locale);
+
+    }
+
     render() {
         //let re = /(signin|signup)/;
         //let isAuth = re.test(this.props.location.pathname);
@@ -75,6 +81,7 @@ class App extends React.Component {
                     : <div>
                         <Header isLoggedIn={this.props.status.isLoggedIn} onLogout={this.handleSignout}/>
                         <SideNav />
+                        <LangPicker onSetLocale={this.handleLocale}/>
                       </div>}
                 {this.props.children}
             </div>
@@ -95,6 +102,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         requestSignout: () => {
             return dispatch(requestSignout());
+        },
+        changeLocale: (locale) => {
+            return dispatch(changeLocale(locale));
         }
     };
 };

@@ -5,7 +5,8 @@ import {
   requestAddComment,
   requestCommentList,
   requestUpdateComment,
-  requestRemoveComment
+  requestRemoveComment,
+  requestCommentStar
 } from 'actions/comment';
 
 class Home extends React.Component {
@@ -17,6 +18,7 @@ class Home extends React.Component {
         this.handleRemove = this.handleRemove.bind(this);
         this.loadNewComment = this.loadNewComment.bind(this);
         this.loadOldComment = this.loadOldComment.bind(this);
+        this.handleStar = this.handleStar.bind(this);
 
         this.state = {
             loadingState: false
@@ -191,6 +193,26 @@ class Home extends React.Component {
         });
     }
 
+    handleStar(id, index) {
+      this.props.requestCommentStar(id, index)
+        .then(() => {
+          if(this.props.starStatus.status !== "SUCCESS") {
+            let errorMessage= [
+                'Something broke',
+                'You are not logged in',
+                'That memo does not exist'
+            ];
+
+            let $toastContent = '<span style="color: #FFB4BA">' + errorMessage[this.props.starStatus.error - 1] + '</span>';
+            Materialize.toast($toastContent, 2000);
+
+            if(this.props.starStatus.error === 2) {
+                setTimeout(()=> {location.reload(false)}, 2000);
+            }
+          }
+        });
+    }
+
     render() {
         const write = (<Write onPost={this.handlePost}/>);
 
@@ -205,6 +227,7 @@ class Home extends React.Component {
                   currentUser={this.props.currentUser}
                   onEdit={this.handleEdit}
                   onRemove={this.handleRemove}
+                  onStar={this.handleStar}
                 />
             </div>
         );
@@ -220,7 +243,8 @@ const mapStateToProps = (state) => {
         listStatus: state.comment.list.status,
         isLast: state.comment.list.isLast,
         editStatus: state.comment.edit,
-        removeStatus: state.comment.remove
+        removeStatus: state.comment.remove,
+        starStatus: state.comment.star
     };
 };
 
@@ -237,6 +261,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         requestRemoveComment: (id, index) => {
             return dispatch(requestRemoveComment(id, index));
+        },
+        requestCommentStar: (id, index) => {
+            return dispatch(requestCommentStar(id, index));
         }
     };
 };

@@ -5,5 +5,6 @@ import SignupForm from './SignupForm';
 import Write from './Write';
 import Comment from './Comment';
 import CommentList from './CommentList';
+import LangPicker from './LangPicker'
 
-export { Header, SideNav, SigninForm, SignupForm, Write, Comment, CommentList };
+export { Header, SideNav, SigninForm, SignupForm, Write, Comment, CommentList, LangPicker };

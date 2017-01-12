@@ -10,7 +10,10 @@ import {
     UPDATE_COMMENT_FAILURE,
     DEL_COMMENT,
     DEL_COMMENT_SUCCESS,
-    DEL_COMMENT_FAILURE
+    DEL_COMMENT_FAILURE,
+    REQ_STAR,
+    REQ_STAR_SUCCESS,
+    REQ_STAR_FAILURE
 } from './ActionTypes';
 import axios from 'axios';
 
@@ -149,6 +152,39 @@ export function removeCommentSuccess(index) {
 export function removeCommentFailure(error) {
   return {
     type: DEL_COMMENT_FAILURE,
+    error
+  }
+}
+
+export function requestCommentStar(id, index) {
+  return (dispatch) => {
+    dispatch(commentStar());
+    return axios.post('/api/comment/star/' + id)
+      .then((response) => {
+        dispatch(commentStarSuccess(index, response.data.comment));
+      }).catch((error) => {
+        dispatch(commentStarFailure(error.response.data.code));
+      });
+  }
+}
+
+export function commentStar() {
+  return {
+    type: REQ_STAR
+  }
+}
+
+export function commentStarSuccess(index, comment) {
+  return {
+    type: REQ_STAR_SUCCESS,
+    comment,
+    index
+  }
+}
+
+export function commentStarFailure(error) {
+  return {
+    type: REQ_STAR_FAILURE,
     error
   }
 }

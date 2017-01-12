@@ -18,6 +18,10 @@ const initialState = {
     remove: {
       status: 'INIT',
       error: -1
+    },
+    star: {
+        status: 'INIT',
+        error: -1
     }
 };
 
@@ -131,6 +135,31 @@ export default function comment(state, action) {
         case types.DEL_COMMENT_FAILURE:
             return update(state, {
                 remove: {
+                    status: { $set: 'FAILURE' },
+                    error: { $set: action.error }
+                }
+            });
+        case types.REQ_STAR:
+            return update(state, {
+                star: {
+                    status: { $set: 'WAITING' },
+                    error: { $set: -1 }
+                }
+            });
+        case types.REQ_STAR_SUCCESS:
+            return update(state, {
+                star: {
+                    status: { $set: 'SUCCESS' }
+                },
+                list: {
+                    data: {
+                        [action.index]: { $set: action.comment }
+                    }
+                }
+            });
+        case types.REQ_STAR_FAILURE:
+            return update(state, {
+                star: {
                     status: { $set: 'FAILURE' },
                     error: { $set: action.error }
                 }

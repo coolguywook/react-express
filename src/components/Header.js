@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import { Translate } from 'react-redux-i18n';
 
 import 'materialize-css/dist/js/materialize.min.js';
 import 'materialize-css/dist/css/materialize.min.css';
@@ -23,21 +24,21 @@ class Header extends React.Component {
         const signinButton = (
           <li>
               <Link to="/signin">
-                  <i className="material-icons left">lock_open</i>Sign In</Link>
+                  <i className="material-icons left">lock_open</i><Translate value="app.signIn"/></Link>
           </li>
         );
 
         const signoutButton = (
           <li>
               <a onClick={this.props.onLogout}>
-                  <i className="material-icons left">lock</i>Sign Out</a>
+                  <i className="material-icons left">lock</i><Translate value="app.signOut"/></a>
           </li>
         );
 
         const signupButton = (
             <li>
                 <Link to="/signup">
-                    <i className="material-icons left">vpn_key</i>Sign Up</Link>
+                    <i className="material-icons left">vpn_key</i><Translate value="app.signUp"/></Link>
             </li>
         );
 
@@ -45,7 +46,7 @@ class Header extends React.Component {
             <nav>
                 <div className="nav-wrapper">
                     <a href="#" data-activates="slide-out" className="button-collapse"><i className="material-icons">menu</i></a>
-                    <Link to="/" className="brand-logo" style={styles.logo}>COOLGUYWOOK</Link>
+                    <Link to="/" className="brand-logo" style={styles.logo}><Translate value="app.title"/></Link>
                     <ul className="right hide-on-med-and-down">
                       { signupButton }
                       { this.props.isLoggedIn ? signoutButton : signinButton }

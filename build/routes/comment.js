@@ -55,7 +55,7 @@ router.post('/', function (req, res) {
 });
 
 // Modify
-router.post('/:id', function (req, res) {
+router.put('/:id', function (req, res) {
     if (!_mongoose2.default.Types.ObjectId.isValid(req.params.id)) {
         return res.status(400).json({
             error: "INVALID ID",
@@ -107,7 +107,7 @@ router.post('/:id', function (req, res) {
 });
 
 // Delete
-router.post('/:id', function (req, res) {
+router.delete('/:id', function (req, res) {
     if (!_mongoose2.default.Types.ObjectId.isValid(req.params.id)) {
         return res.status(400).json({
             error: "INVALID ID",
@@ -147,11 +147,44 @@ router.post('/:id', function (req, res) {
 });
 
 // Get
-router.post('/', function (req, res) {
+router.get('/', function (req, res) {
     _comment2.default.find().sort({ "_id": -1 }).limit(6).exec(function (err, comments) {
         if (err) throw err;
         res.json(comments);
     });
+});
+
+router.get('/:listType/:id', function (req, res) {
+    var listType = req.params.listType;
+    var id = req.params.id;
+
+    if (listType !== 'old' && listType !== 'new') {
+        return res.status(400).json({
+            error: "INVALID LISTTYPE",
+            code: 1
+        });
+    }
+
+    if (!_mongoose2.default.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({
+            error: "INVALID ID",
+            code: 2
+        });
+    }
+
+    var objId = new _mongoose2.default.Types.ObjectId(req.params.id);
+
+    if (listType === 'new') {
+        _comment2.default.find({ _id: { $gt: objId } }).sort({ _id: -1 }).limit(6).exec(function (err, comments) {
+            if (err) throw err;
+            return res.json(comments);
+        });
+    } else {
+        _comment2.default.find({ _id: { $lt: objId } }).sort({ "_id": -1 }).limit(6).exec(function (err, comments) {
+            if (err) throw err;
+            return res.json(comments);
+        });
+    }
 });
 
 exports.default = router;

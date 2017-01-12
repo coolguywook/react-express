@@ -223,3 +223,21 @@ label {
     -webkit-animation-name: comment-leave;
     animation-name: comment-leave;
 }
+
+#tx-live-lang-container {
+    background-color: #fcfcfc;
+    z-index: 999;
+}
+
+.txlive-langselector.txlive-langselector-bottomright {
+    position: fixed;
+    top: auto;
+    left: auto;
+    right: 0;
+    bottom: 0;
+    border-radius: 2px 0 0 0;
+    -moz-border-radius: 2px 0 0 0;
+    -webkit-border-radius: 2px 0 0 0;
+    height: 45px;
+    width: 100px;
+}

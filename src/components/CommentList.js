@@ -13,6 +13,8 @@ class CommentList extends React.Component {
                             index={i}
                             onEdit={this.props.onEdit}
                             onRemove={this.props.onRemove}
+                            onStar={this.props.onStar}
+                            currentUser={this.props.currentUser}
                         />
                 );
             });
@@ -36,7 +38,8 @@ CommentList.PropTypes = {
     data: React.PropTypes.array,
     currentUser: React.PropTypes.string,
     onEdit: React.PropTypes.func,
-    onRemove: React.PropTypes.func
+    onRemove: React.PropTypes.func,
+    onStar: React.PropTypes.func
 }
 
 CommentList.defaultProps = {
@@ -47,6 +50,9 @@ CommentList.defaultProps = {
     },
     onRemove: (id, index) => {
         console.error('Remove function not defined');
+    },
+    onStar: (id, index) => {
+        console.error('Star function not defined');
     }
 }
 

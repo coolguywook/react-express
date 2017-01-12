@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
+import { Translate } from 'react-redux-i18n';
 
 class SigninForm extends React.Component {
 
@@ -35,7 +36,7 @@ class SigninForm extends React.Component {
             <div className="container auth">
                 <div className="card">
                     <div className="header grey darken-2 white-text center">
-                        <div className="card-content">SIGN IN</div>
+                        <div className="card-content"><Translate value="app.signIn"/></div>
                     </div>
                     <div className="card-content">
                         <div className="row">
