@@ -12,6 +12,7 @@ module.exports = {
 
     output: {
         path: '/',
+        publicPath: '/',
         filename: 'bundle.js'
     },
 
@@ -57,8 +58,8 @@ module.exports = {
             //      loader:"url?prefix=font/&limit=5000"
              }, {
                  test: /\.(woff|woff2|ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-                 //loader: "url-loader?limit=10000&name=media/[name]-[hash:8].[ext]"
-                 loaders: ['file?hash=sha512&digest=hex&name=media/[name]-[hash:8].[ext]']
+                 loader: "url-loader?limit=10000&name=media/[name]-[hash:8].[ext]"
+                 //loaders: ['file?hash=sha512&digest=hex&name=media/[name]-[hash:8].[ext]']
              }
         ]
     },

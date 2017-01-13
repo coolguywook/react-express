@@ -37,3 +37,7 @@ export const DEL_COMMENT_FAILURE = "DEL_COMMENT_FAILURE";
 export const REQ_STAR = "REQ_STAR";
 export const REQ_STAR_SUCCESS = "REQ_STAR_SUCCESS";
 export const REQ_STAR_FAILURE = "REQ_STAR_FAILURE";
+
+export const SEARCH = "SEARCH";
+export const SEARCH_SUCCESS = "SEARCH_SUCCESS";
+export const SEARCH_FAILURE = "SEARCH_FAILURE";

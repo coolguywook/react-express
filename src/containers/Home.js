@@ -21,7 +21,8 @@ class Home extends React.Component {
         this.handleStar = this.handleStar.bind(this);
 
         this.state = {
-            loadingState: false
+            loadingState: false,
+            initiallyLoaded: false
         }
     }
 
@@ -47,9 +48,12 @@ class Home extends React.Component {
           }
         };
 
-        this.props.requestCommentList(true).then(
+        this.props.requestCommentList(true, undefined, undefined, this.props.username).then(
             () => {
-              loadUntilScrollable();
+              this.setState({
+                    initiallyLoaded: true
+              });
+              setTimeout(loadUntilScrollable, 1000);
               loadCommentLoop();
             }
         );
@@ -76,6 +80,17 @@ class Home extends React.Component {
         clearTimeout(this.commentLoaderTimeoutId);
 
         $(window).unbind();
+
+        this.setState({
+           initiallyLoaded: false
+        });
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+       if(this.props.username !== prevProps.username) {
+           this.componentWillUnmount();
+           this.componentDidMount();
+       }
     }
 
     loadOldComment() {
@@ -87,7 +102,7 @@ class Home extends React.Component {
 
         let lastId = this.props.commentData[this.props.commentData.length -1]._id;
 
-        return this.props.requestCommentList(false, 'old', lastId).then(() => {
+        return this.props.requestCommentList(false, 'old', lastId, this.props.username).then(() => {
             if(this.props.isLast) {
                 Materialize.toast('This is last page', 2000);
             }
@@ -102,10 +117,10 @@ class Home extends React.Component {
         }
 
         if(this.props.commentData.length === 0) {
-            return this.props.requestCommentList(true);
+            return this.props.requestCommentList(true, undefined, undefined, this.props.username);
         }
 
-        return this.props.requestCommentList(false, 'new', this.props.commentData[0]._id);
+        return this.props.requestCommentList(false, 'new', this.props.commentData[0]._id, this.props.username);
     }
 
     handleEdit(id, index, contents) {
@@ -216,9 +231,32 @@ class Home extends React.Component {
     render() {
         const write = (<Write onPost={this.handlePost}/>);
 
+        const emptyView = (
+                    <div className="container">
+                        <div className="empty-page">
+                            <b>{this.props.username}</b> isn't registered or hasn't written any memo
+                        </div>
+                    </div>
+        );
+
+        const wallHeader = (
+            <div>
+                <div className="container wall-info">
+                    <div className="card wall-info blue lighten-2 white-text">
+                        <div className="card-content">
+                            {this.props.username}
+                        </div>
+                    </div>
+                </div>
+                { this.props.commentData.length === 0 && this.state.initiallyLoaded ? emptyView : undefined }
+
+            </div>
+        );
 
         return (
             <div className="wrapper">
+                { typeof this.props.username !== "undefined" ? wallHeader : undefined }
+
                 {this.props.isLoggedIn
                     ? write
                     : undefined}
@@ -232,6 +270,14 @@ class Home extends React.Component {
             </div>
         );
     }
+}
+
+Home.PropTypes = {
+  username: React.PropTypes.string
+}
+
+Home.defaultProps = {
+  username: undefined
 }
 
 const mapStateToProps = (state) => {

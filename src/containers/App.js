@@ -3,7 +3,7 @@ import {Header, SideNav, LangPicker} from 'components';
 import {connect} from 'react-redux';
 import {getStatusRequest, requestSignout} from 'actions/authentication';
 import {changeLocale} from 'actions/locale';
-
+import { searchRequest } from 'actions/search';
 
 import './App.css';
 
@@ -13,7 +13,10 @@ class App extends React.Component {
         super(props);
         this.handleSignout = this.handleSignout.bind(this);
         this.handleLocale = this.handleLocale.bind(this);
+         this.handleSearch = this.handleSearch.bind(this);
     }
+
+
 
     componentDidMount() {
         function getCookie(name) {
@@ -69,6 +72,10 @@ class App extends React.Component {
 
     }
 
+    handleSearch(keyword) {
+        this.props.searchRequest(keyword);
+    }
+
     render() {
         //let re = /(signin|signup)/;
         //let isAuth = re.test(this.props.location.pathname);
@@ -79,7 +86,8 @@ class App extends React.Component {
                 {isAuth
                     ? undefined
                     : <div>
-                        <Header isLoggedIn={this.props.status.isLoggedIn} onLogout={this.handleSignout}/>
+                        <Header isLoggedIn={this.props.status.isLoggedIn} onLogout={this.handleSignout} onSearch={this.handleSearch}
+                            usernames={this.props.searchResults}/>
                         <SideNav />
                         <LangPicker onSetLocale={this.handleLocale}/>
                       </div>}
@@ -91,7 +99,8 @@ class App extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        status: state.authentication.status
+        status: state.authentication.status,
+        searchResults: state.search.usernames
     };
 };
 
@@ -105,6 +114,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         changeLocale: (locale) => {
             return dispatch(changeLocale(locale));
+        },
+        searchRequest: (keyword) => {
+            return dispatch(searchRequest(keyword));
         }
     };
 };

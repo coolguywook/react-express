@@ -73,7 +73,7 @@ class SigninForm extends React.Component {
     }
 }
 
-SigninForm.propTypes = {
+SigninForm.PropTypes = {
     onSignin: React.PropTypes.func
 }
 

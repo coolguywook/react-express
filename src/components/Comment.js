@@ -1,6 +1,7 @@
 import React from 'react';
 import TimeAgo from 'react-timeago';
 import ReactDOM from 'react-dom';
+import { Link } from 'react-router';
 
 class Comment extends React.Component {
 
@@ -116,7 +117,7 @@ class Comment extends React.Component {
         const commentView = (
             <div className="card">
                 <div className="info">
-                    <a className="username">{data.writer}</a> · <TimeAgo date={data.date.created}/>
+                    <Link to={`/wall/${this.props.data.writer}`} className="username">{data.writer}</Link> · <TimeAgo date={data.date.created}/>
                     { this.props.data.isEdited ? editedInfo : undefined }
                     { ownership ? dropDownMenu : undefined }
                 </div>

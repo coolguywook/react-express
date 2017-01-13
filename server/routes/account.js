@@ -84,6 +84,23 @@ router.post('/signin', (req, res) => {
     })
 });
 
+router.get('/search/:username', (req, res) => {
+    // SEARCH USERNAMES THAT STARTS WITH GIVEN KEYWORD USING REGEX
+    var re = new RegExp('^' + req.params.username);
+    Account.find({username: {$regex: re}}, {_id: false, username: true})
+    .limit(5)
+    .sort({username: 1})
+    .exec((err, accounts) => {
+        if(err) throw err;
+        res.json(accounts);
+    });
+});
+
+// EMPTY SEARCH REQUEST: GET /api/account/search
+router.get('/search', (req, res) => {
+    res.json([]);
+});
+
 /*
     To check validate cookie, when refresh browser.
 */
