@@ -32,11 +32,14 @@ var _expressSession = require('express-session');
 
 var _expressSession2 = _interopRequireDefault(_expressSession);
 
+var _routes = require('./routes');
+
+var _routes2 = _interopRequireDefault(_routes);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// PARSE HTML BODY
-
-var app = (0, _express2.default)(); // HTTP REQUEST LOGGER
+// HTTP REQUEST LOGGER
+var app = (0, _express2.default)(); // PARSE HTML BODY
 
 var port = 3000;
 var devPort = 3001;
@@ -61,10 +64,16 @@ app.use((0, _expressSession2.default)({
 
 app.use('/', _express2.default.static(_path2.default.join(__dirname, './../public')));
 
+app.use('/api', _routes2.default);
+
+app.get('*', function (req, res) {
+    res.sendFile(_path2.default.resolve(__dirname, './../public/index.html'));
+});
+
 /* handle error */
 app.use(function (err, req, res, next) {
     console.error(err.stack);
-    res.status(500).send('Something broke!');
+    res.status(500).send('Internal Server error.');
 });
 
 app.listen(port, function () {
